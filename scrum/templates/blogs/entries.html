@@ -1,0 +1,141 @@
+{% extends 'scrum/base.html' %}
+{% load humanize %}
+{% block title %}Articles{% endblock %}
+{% block tabs %}
+  <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+    <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Browse</a>
+    <a href="#scroll-tab-2" class="mdl-layout__tab">Subscriptions</a>
+    <a href="#scroll-tab-3" class="mdl-layout__tab">Write</a>
+  </div>
+{% endblock %}
+{% block sections %}
+  <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+    <div class="page-content">
+    {% block browse %}
+      <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="mdl-tabs__tab-bar">
+          <a href="#tab1" class="mdl-tabs__tab is-active">Most recent</a>
+          <a href="#tab2" class="mdl-tabs__tab">Top rated</a>
+        </div>
+        <div class="mdl-tabs__panel is-active" id="tab1">
+        {% block recent %}
+          <div class="mdl-grid">
+          {% for entry in entries_latest reversed %}
+            <div class="mdl-cell mdl-cell--4-col">
+              <div class="mdl-card mdl-shadow--4dp">
+            	  <div class="mdl-card__title">
+            		  <h2 class="mdl-card__title-text">{{ entry.title }}</h2>
+            	  </div>
+            	  <div class="mdl-card__supporting-text">
+                  {{ entry.content|truncatechars:140 }}
+            	  </div>
+            	  <div class="mdl-card__actions">
+                  <a href="{% url 'blogs:entry' entry.id %}">
+              		  <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--accent" type="submit">
+              			  <i class="material-icons">open_in_new</i>
+              			</button>
+                  </a>
+            	  </div>
+            	</div>
+            </div>
+          {% endfor %}
+          </div>
+        {% endblock %}
+        </div>
+        <div class="mdl-tabs__panel" id="tab2">
+        {% block top %}
+          <div class="mdl-grid">
+          {% for entry in entries_top reversed %}
+            <div class="mdl-cell mdl-cell--4-col">
+              <div class="mdl-card mdl-shadow--4dp">
+            	  <div class="mdl-card__title">
+            		  <h2 class="mdl-card__title-text">{{ entry.title }}</h2>
+            	  </div>
+            	  <div class="mdl-card__supporting-text">
+                  {{ entry.content|truncatechars:140 }}
+            	  </div>
+            	  <div class="mdl-card__actions">
+                  <a href="{% url 'blogs:entry' entry.id %}">
+              		  <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--accent" type="submit">
+              			  <i class="material-icons">open_in_new</i>
+              			</button>
+                  </a>
+            	  </div>
+            	</div>
+            </div>
+          {% endfor %}
+          </div>
+        {% endblock %}
+        </div>
+      </div>
+      <h6 align='center'>
+      {% for page in pages %}
+        <a href="{% url 'blogs:entries' page=page %}">{{ page }}</a>
+      {% endfor %}
+      </h6>
+    {% endblock %}
+    </div>
+  </section>
+  <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+    <div class="page-content">
+    {% block subscriptions %}
+    {% for entry in entires_subscribed reversed %}
+      <div class="mdl-card mdl-shadow--4dp">
+        <div class="mdl-card__title">
+          <h2 class="mdl-card__title-text">{{ entry.title }}</h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+          <p>{{ entry.content }}</p>
+          <div class="details">
+            {{ entry.rating}} likes |
+            {{ entry.pub_date|naturaltime }} |
+            {{ entry.author.email }}
+          </div>
+        </div>
+        <div class="mdl-card__actions">
+          <a href="{% url 'blogs:like' entry.id %}">
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {% if entry in request.user.liked.all %}disabled{% endif %}>
+              <i class="material-icons" id="like">thumb_up</i>
+            </button>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+    {% endblock %}
+    </div>
+  </section>
+  <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+    <div class="page-content">
+    {% block me %}
+      <a href="{% url 'blogs:write' %}">
+        <button id="tt1" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" style="position: absolute; bottom: 50px; right: 40px;">
+          <i class="material-icons">add</i>
+        </button>
+      </a>
+      <span for="tt1" class="mdl-tooltip">New entry</span>
+      {% for entry in request.user.entry_set.all reversed %}
+        <div class="mdl-card mdl-shadow--4dp">
+          <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">{{ entry.title }}</h2>
+          </div>
+          <div class="mdl-card__supporting-text">
+            <p>{{ entry.content }}</p>
+            <div class="details">
+              {{ entry.rating}} likes |
+              {{ entry.pub_date|naturaltime }} |
+              {{ entry.author.email }}
+            </div>
+          </div>
+          <div class="mdl-card__actions">
+            <a href="{% url 'blogs:remove' entry.id %}">
+              <button class="mdl-button mdl-js-button">
+                Remove
+              </button>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    {% endblock %}
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'scrum/base.html' %}
+{% block title %}Collaboration{% endblock %}
+{% block content %}
+<form action="{% url 'qanda:ask' %}" method="post">
+	<div class="mdl-card wide">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">New question</h2>
+		</div>
+		{% csrf_token %}
+		<div class="mdl-card__supporting-text">
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="text" id="title" name="title"/>
+				<label class="mdl-textfield__label" for="title">Question</label>
+			</div>
+			<div class="mdl-textfield mdl-js-textfield">
+				<textarea class="mdl-textfield__input" type="text" rows= "3" id="specifics" name="specifics"></textarea>
+				<label class="mdl-textfield__label" for="specifics">Specifics</label>
+			</div>
+			<h5>Category:</h5>
+			{% for category in categories %}
+			<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="{{ category.id }}">
+				<input checked class="mdl-radio__button" id="{{ category.id }}" name="category" type="radio" value="{{ category.id }}">
+				<span class="mdl-radio__label">{{ category.name }}</span>
+			</label>
+			<br>
+			{% endfor %}
+		</div>
+		<div class="mdl-card__actions">
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+				Send
+			</button>
+		</div>
+	</div>
+</form>
+{% endblock %}

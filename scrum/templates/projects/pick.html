@@ -1,0 +1,20 @@
+{% extends 'scrum/base.html' %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block menu %}
+<span class="mdl-layout-title">Projects</span>
+<nav class="mdl-navigation">
+  {% for project in projects %}
+    <a class="mdl-navigation__link" href="{% url 'projects:tasks' project.pk %}">{{ project.name }}</a>
+  {% endfor %}
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="mdl-card mdl-shadow--4dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Pick a project...</h2>
+  </div>
+</div>
+{% endblock %}

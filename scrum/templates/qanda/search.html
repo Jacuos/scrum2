@@ -1,0 +1,29 @@
+{% extends 'scrum/base.html' %}
+{% block title %}Collaboration{% endblock %}
+{% load humanize %}
+{% block content %}
+{% for question in results %}
+<div class="mdl-card wide">
+	<div class="mdl-card__title">
+		<h2 class="mdl-card__title-text">{{ question.title }}</h2>
+	</div>
+	<div class="mdl-card__supporting-text">
+		<p>{{ question.specifics }}</p>
+		<div class="details">
+      {{ question.pub_date|naturaltime }} |
+      {{ question.category.name }} |
+      {{ question.author.email }}
+    </div>
+	</div>
+	{% for answer in question.answer_set.all %}
+	<div class="mdl-card__supporting-text">
+		<p>{{ answer.text }}<p>
+		<div class="details">
+			{{ answer.pub_date|naturaltime }} |
+			<a href="">{{ answer.author.email }}</a>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

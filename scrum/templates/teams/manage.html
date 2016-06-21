@@ -1,0 +1,15 @@
+{% extends 'scrum/base.html' %}
+
+{% block title %}Teams{% endblock %}
+
+{% block menu %}
+<span class="mdl-layout-title">Teams</span>
+<nav class="mdl-navigation">
+  {% for team in user_teams %}
+	<a class="mdl-navigation__link" href="{% url 'teams:pick_team' team.id %}">{{ team.name }}</a>
+  {% endfor %}
+</nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

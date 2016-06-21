@@ -1,0 +1,26 @@
+{% extends 'scrum/base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block menu %}
+<span class="mdl-layout-title">Rooms</span>
+<nav class="mdl-navigation">
+  {% for room in rooms %}
+	<a class="mdl-navigation__link" href="{% url 'chat:pick_room' room.label %}">{{ room.label }}</a>
+  {% endfor %}
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="mdl-card mdl-shadow--4dp">
+  <div class="mdl-card__supporting-text">
+    <form action="{% url 'chat:start_room' %}" method="POST">
+      {% csrf_token %}
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="start" name="label">
+        <label class="mdl-textfield__label" for="start">Start new room...</label>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

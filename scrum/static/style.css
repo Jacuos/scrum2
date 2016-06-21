@@ -1,0 +1,31 @@
+.mdl-layout__drawer-button {
+	padding-top: 10px;
+	height: 38px;
+}
+
+.mdl-layout {
+	background-color: #EFEFEF
+}
+
+.mdl-card {
+	margin: 0 auto;
+}
+
+.mdl-data-table {
+	margin: 0 auto;
+}
+
+a {
+	text-decoration: none;
+}
+
+#chat-input-box {
+	padding: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+	overflow: hidden;
+	z-index: 999;
+}

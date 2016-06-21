@@ -1,0 +1,141 @@
+{% extends 'projects/pick.html' %}
+
+{% block tabs %}
+<div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+  <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Mine</a>
+  <a href="#scroll-tab-2" class="mdl-layout__tab">All</a>
+</div>
+{% endblock %}
+
+{% block sections %}
+<section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+  <div class="page-content">
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+      <div class="mdl-tabs__tab-bar">
+          <a href="#starks-panel" class="mdl-tabs__tab">To do</a>
+          <a href="#lannisters-panel" class="mdl-tabs__tab is-active">In progress</a>
+          <a href="#targaryens-panel" class="mdl-tabs__tab">Done</a>
+      </div>
+      <div class="mdl-tabs__panel" id="starks-panel">
+        <div class="mdl-grid">
+        {% for task in to_do %}
+          <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-card mdl-shadow--4dp">
+          	  <div class="mdl-card__title">
+          		  <h2 class="mdl-card__title-text">{{ task.summary }}</h2>
+          	  </div>
+          	  <div class="mdl-card__supporting-text">
+                {{ task.description|truncatechars:140 }}
+          	  </div>
+          	  <div class="mdl-card__actions">
+                  <a href="{% url 'projects:start_task' task.id %}">
+              		  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+              			  Start
+              			</button>
+                  </a>
+          	  </div>
+          	</div>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+      <div class="mdl-tabs__panel is-active" id="lannisters-panel">
+        <div class="mdl-grid">
+        {% for task in in_progress %}
+          <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-card mdl-shadow--4dp">
+          	  <div class="mdl-card__title">
+          		  <h2 class="mdl-card__title-text">{{ task.summary }}</h2>
+          	  </div>
+          	  <div class="mdl-card__supporting-text">
+                {{ task.description|truncatechars:140 }}
+          	  </div>
+          	  <div class="mdl-card__actions">
+                <a href="{% url 'projects:resolve_task' task.id %}">
+            		  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+            			  Resolve
+            			</button>
+                </a>
+          	  </div>
+          	</div>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+      <div class="mdl-tabs__panel" id="targaryens-panel">
+        <div class="mdl-grid">
+        {% for task in done %}
+          <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-card mdl-shadow--4dp">
+          	  <div class="mdl-card__title">
+          		  <h2 class="mdl-card__title-text">{{ task.summary }}</h2>
+          	  </div>
+          	  <div class="mdl-card__supporting-text">
+                {{ task.description|truncatechars:140 }}
+          	  </div>
+          	</div>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="mdl-layout__tab-panel" id="scroll-tab-2">
+  <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+    <div class="mdl-tabs__tab-bar">
+        <a href="#greyjoys-panel" class="mdl-tabs__tab">To do</a>
+        <a href="#mormonts-panel" class="mdl-tabs__tab is-active">In progress</a>
+        <a href="#boltons-panel" class="mdl-tabs__tab">Done</a>
+    </div>
+    <div class="mdl-tabs__panel" id="greyjoys-panel">
+      <div class="mdl-grid">
+      {% for task in all_to_do %}
+        <div class="mdl-cell mdl-cell--3-col">
+          <div class="mdl-card mdl-shadow--4dp">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">{{ task.summary }}</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              {{ task.description|truncatechars:140 }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+    <div class="mdl-tabs__panel is-active" id="mormonts-panel">
+      <div class="mdl-grid">
+      {% for task in all_in_progress %}
+        <div class="mdl-cell mdl-cell--3-col">
+          <div class="mdl-card mdl-shadow--4dp">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">{{ task.summary }}</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              {{ task.description|truncatechars:140 }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+    <div class="mdl-tabs__panel" id="boltons-panel">
+      <div class="mdl-grid">
+      {% for task in all_done %}
+        <div class="mdl-cell mdl-cell--3-col">
+          <div class="mdl-card mdl-shadow--4dp">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">{{ task.summary }}</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              {{ task.description|truncatechars:140 }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

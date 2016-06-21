@@ -1,0 +1,147 @@
+{% extends 'scrum/base.html' %}
+{% block title %}Collaboration{% endblock %}
+{% load humanize %}
+{% block tabs %}
+<div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+  <a href="#scroll-tab-2" class="mdl-layout__tab is-active">Answer{% if request.user.recived.all %}<span class="mdl-badge" data-badge="{{ request.user.recived.all.count }}"></span>{% endif %}</a>
+  <a href="#scroll-tab-1" class="mdl-layout__tab">Ask</a>
+  <a href="#scroll-tab-3" class="mdl-layout__tab">Find</a>
+</div>
+{% endblock %}
+{% block sections %}
+<section class="mdl-layout__tab-panel" id="scroll-tab-1">
+  <div class="page-content">
+  {% block ask %}
+    <a href="{% url 'qanda:ask' %}">
+      <button id="tt1" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" style="position: absolute; bottom: 50px; right: 40px;">
+        <i class="material-icons">add</i>
+      </button>
+    </a>
+    <span for="tt1" class="mdl-tooltip">New question</span>
+    {% for question in request.user.asked.all %}
+    {% if question.active %}
+    <div class="mdl-card wide">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{ question.title }}</h2>
+      </div>
+      <div class="mdl-card__supporting-text mdl-card--border">
+        <p>{{ question.specifics }}</p>
+        <div class="details">
+          {{ question.pub_date|naturaltime }} |
+          {{ question.category.name }} |
+          {{ question.author.email }}
+        </div>
+      </div>
+      {% for answer in question.answer_set.all %}
+      <div class="mdl-card__supporting-text">
+      <p>{{ answer.text }}</p>
+        <div class="details">
+          {{ answer.pub_date|naturaltime }} |
+          <a href="">{{ answer.author.email }}</a>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="mdl-card__actions">
+        <a href="{% url 'qanda:remove' question.id %}">
+          <button class="mdl-button mdl-js-button">
+            Remove
+          </button>
+        </a>
+        <a href="{% url 'qanda:archive' question.id %}">
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored ">
+            Archive
+          </button>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+  {% endfor %}
+  {% endblock %}
+	</div>
+</section>
+<section class="mdl-layout__tab-panel is-active" id="scroll-tab-2">
+  <div class="page-content">
+  {% block answer %}
+  {% for question in request.user.recived.all reversed %}
+  {% if question.active %}
+    <div class="mdl-card wide">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{ question.title }}</h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <p>{{ question.specifics }}</p>
+        <div class="details">
+          {{ question.pub_date|naturaltime }} |
+          {{ question.category.name }} |
+          {{ question.author.email }}
+        </div>
+      </div>
+      <div class="mdl-card__actions">
+        <a href="{% url 'qanda:ignore' question.id %}">
+          <button class="mdl-button mdl-js-button">
+            Ignore
+          </button>
+        </a>
+        <a href="{% url 'qanda:answer' question.id %}">
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+            Answer
+          </button>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+  {% endfor %}
+  {% endblock %}
+	</div>
+</section>
+<section class="mdl-layout__tab-panel" id="scroll-tab-3">
+  <div class="page-content">
+  {% block find %}
+  <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+    <div class="mdl-tabs__tab-bar">
+    {% for category in categories %}
+        <a href="#{{category.name}}" class="mdl-tabs__tab {% ifequal category.name 'Python' %}is-active{% endifequal %}">{{ category.name }}</a>
+    {% endfor %}
+    <form action="{% url 'qanda:search' %}" method="post">
+      {% csrf_token %}
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable textfield-demo" style="bottom: 6px;">
+        <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" id="search" name="search" />
+          <label class="mdl-textfield__label" for="search-expandable">Search</label>
+        </div>
+      </div>
+    </form>
+    </div>
+    {% for category in categories %}
+    <div class="mdl-tabs__panel {% ifequal category.name 'Python' %}is-active{% endifequal %}" id="{{category.name}}">
+      {% if category.question_set.all.count >= 1 %}
+      <table class="mdl-data-table mdl-js-data-table">
+        <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">Question</th>
+            <th class="mdl-data-table__cell--non-numeric">Author</th>
+            <th class="mdl-data-table__cell--non-numeric">Activity</th>
+            <th class="mdl-data-table__cell--non-numeric">Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for question in category.question_set.all %}
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric"><a href="{% url 'qanda:details' question.id %}">{{ question.title }}</a> </td>
+            <td class="mdl-data-table__cell--non-numeric">{{ question.author.email }}
+            <td class="mdl-data-table__cell--non-numeric">{{ question.pub_date|naturaltime }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ question.mod_date|naturaltime }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% endblock %}
+	</div>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'scrum/base.html' %}
+{% block title %}Articles{% endblock %}
+{% block content %}
+<form action="{% url 'blogs:write' %}" method="post">
+	<div class="mdl-card wide">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">New entry</h2>
+		</div>
+		{% csrf_token %}
+		<div class="mdl-card__supporting-text">
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="text" id="title" name="title"/>
+				<label class="mdl-textfield__label" for="title">Title</label>
+			</div>
+			<div class="mdl-textfield mdl-js-textfield">
+				<textarea class="mdl-textfield__input" type="text" rows= "10" id="content" name="content"></textarea>
+				<label class="mdl-textfield__label" for="content">Content</label>
+			</div>
+		</div>
+		<div class="mdl-card__actions">
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+				Publish
+			</button>
+		</div>
+	</div>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'scrum/base.html' %}
+{% load humanize %}
+{% block title %}Articles{% endblock %}
+{% block content %}
+<div class="mdl-card wide">
+	<div class="mdl-card__title">
+		<h2 class="mdl-card__title-text">{{ entry.title }}</h2>
+	</div>
+	<div class="mdl-card__supporting-text">
+		<p>{{ entry.content }}</p>
+		<div class="details">
+			{{ entry.rating}} likes |
+			{{ entry.pub_date|naturaltime }} |
+			{{ entry.author.email }}
+		</div>
+	</div>
+	<div class="mdl-card__actions">
+		<a href="{% url 'blogs:subscribe' entry.id %}">
+			<button class="mdl-button mdl-js-button mdl-button--primary" {% if entry.author in request.user.subscriptions.all %}disabled{% endif %}>
+				Subscribe
+			</button>
+		</a>
+		<a href="{% url 'blogs:like' entry.id %}">
+			<button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {% if entry in request.user.liked.all %}disabled{% endif %}>
+				<i class="material-icons" id="like">thumb_up</i>
+			</button>
+		</a>
+	</div>
+</div>
+{% endblock %}

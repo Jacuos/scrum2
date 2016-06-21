@@ -1,0 +1,28 @@
+{% extends 'chat/start.html' %}
+{% block imports %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'jquery-2.2.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'chat.js' %}"></script>
+{% endblock %}
+{% block content %}
+<div id="chat-messages" style="padding: 10px; background-color: white;">
+  {% for message in room_messages %}
+    <b>{{ message.author.email }}</b> {{ message.message }}<br>
+  {% endfor %}
+</div>
+{% endblock %}
+{% block footer %}
+<div id="chat-input-box">
+  <form id="chat-form">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+      <label class="mdl-button mdl-js-button mdl-button--icon" for="chat-input">
+        <i class="material-icons">chat_bubble</i>
+      </label>
+      <div class="mdl-textfield__expandable-holder">
+        <input class="mdl-textfield__input" type="text" id="chat-input">
+        <label class="mdl-textfield__label" for="chat-input">Say something...</label>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

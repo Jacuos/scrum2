@@ -1,0 +1,34 @@
+{% extends 'scrum/base.html' %}
+{% block title %}Collaboration{% endblock %}
+{% block content %}
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+  <form action="{% url 'qanda:settings' %}" method="post">
+		<div class="mdl-card mdl-shadow--4dp">
+			<div class="mdl-card__title">
+				<h2 class="mdl-card__title-text">Select your categories</h2>
+			</div>
+			{% csrf_token %}
+			<div class="mdl-card__supporting-text">
+        {% if messages %}
+    	    {% for message in messages %}
+    	    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    	    {% endfor %}
+    		{% endif %}
+        <p>You will periodically recive questions from selected categories.</p>
+				{% for category in categories %}
+				<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ category.name }}">
+				  <input type="checkbox" id="{{ category.name }}" value="{{ category.name }}" class="mdl-checkbox__input" name="checks" {% if category in request.user.categories.all %} checked {% endif %}/>
+				  <span class="mdl-checkbox__label">{{ category.name }}</span>
+				</label>
+				<br>
+				{% endfor %}
+			</div>
+			<div class="mdl-card__actions">
+				<button class="mdl-button mdl-js-button mdl-button--raised" type="submit">
+					Save
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}
